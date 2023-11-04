@@ -22,13 +22,6 @@ Color currentColor;
 
 std::vector<Model> models;
 
-struct Planet {
-    Model model;        // Modelo 3D del planeta
-    ShaderType shader;  // Tipo de shader para el planeta
-    glm::vec3 position; // Posición del planeta en el espacio
-    glm::vec3 scale;    // Escala del planeta
-};
-
 
 bool init() {
     if (SDL_Init(SDL_INIT_VIDEO) != 0) {
@@ -138,21 +131,12 @@ glm::mat4 createViewportMatrix(size_t screenWidth, size_t screenHeight) {
 }
 
 int SDL_main(int argc, char* argv[]) {
-
-    std::vector<Planet> planets;
-
-    //ShaderType currentShader = ROCOSO;
-    //ShaderType currentShader = GASEOSO;
-    //ShaderType currentShader = ESTRELLA;
-    //ShaderType currentShader = VOLCANICO;
-    //ShaderType currentShader = CRISTAL;
-    //ShaderType currentShader = HIELO;
-
-    Planet rocoso;
-    rocoso.shader = ROCOSO; // Tipo de shader para el planeta rocoso
-    rocoso.position = glm::vec3(0.0f, 0.0f, 0.0f); // Posición del planeta rocoso
-    rocoso.scale = glm::vec3(1.0f, 1.0f, 1.0f); // Escala del planeta rocoso
-    planets.push_back(rocoso);
+    ShaderType Shader1 = ROCOSO;
+    ShaderType Shader2 = GASEOSO;
+    ShaderType Shader3 = ESTRELLA;
+    ShaderType Shader4 = VOLCANICO;
+    ShaderType Shader5 = CRISTAL;
+    ShaderType Shader6 = HIELO;
 
     if (!init()) {
         return 1;
@@ -194,7 +178,7 @@ int SDL_main(int argc, char* argv[]) {
 
     glm::vec3 translationVector(0.0f, 0.0f, 0.0f);
     float a = 45.0f;
-    glm::vec3 rotationAxis(0.0f, 1.0f, 0.0f); // Rotate around the Y-axis
+    glm::vec3 rotationAxis(0.0f, 0.0f, 1.0f); // Rotate around the Y-axis
     glm::vec3 scaleFactor(1.0f, 1.0f, 1.0f);
 
     glm::mat4 translation = glm::translate(glm::mat4(1.0f), translationVector);
@@ -208,7 +192,7 @@ int SDL_main(int argc, char* argv[]) {
     camera.upVector = glm::vec3(0.0f, 1.0f, 0.0f);
 
     // Projection matrix
-    float fovInDegrees = 45.0f;
+    float fovInDegrees = 120.0f;
     float aspectRatio = static_cast<float>(SCREEN_WIDTH) / static_cast<float>(SCREEN_HEIGHT); // Assuming a screen resolution of 800x600
     float nearClip = 0.1f;
     float farClip = 100.0f;
@@ -240,23 +224,62 @@ int SDL_main(int argc, char* argv[]) {
                 camera.upVector        // The up vector defining the camera's orientation
         );
 
+        Model Estrella;
+        Estrella.modelMatrix = glm::mat4(1);
+        Estrella.vertices = vertexBufferObject;
+        Estrella.uniforms = uniforms;
+        Estrella.currentShader = Shader3;
+        models.push_back(Estrella); // Add planeta to models vector
+
         Model planeta;
         planeta.modelMatrix = glm::mat4(1);
         planeta.vertices = vertexBufferObject;
         planeta.uniforms = uniforms;
-        planeta.currentShader = currentShader;
+        planeta.currentShader = Shader1;
+        planeta.uniforms.model = glm::translate(planeta.uniforms.model, glm::vec3(1.5f, 0.0f, 0.0f))
+                              * glm::scale(planeta.uniforms.model, glm::vec3(0.3f, 0.3f, 0.3f));
         models.push_back(planeta); // Add planeta to models vector
 
-        if (planeta.currentShader == ROCOSO) {
-            Model luna;
-            luna.modelMatrix = glm::mat4(1);
-            luna.vertices = vertexBufferObject;
-            luna.currentShader = LUNA;
-            luna.uniforms = uniforms;
-            luna.uniforms.model = glm::translate(luna.uniforms.model, glm::vec3(1.5f, 0.0f, 0.0f))
-                                    * glm::scale(luna.uniforms.model, glm::vec3(0.2f, 0.2f, 0.2f));
-            models.push_back(luna); // Add luna to models vector
-        }
+        Model planeta2;
+        planeta2.modelMatrix = glm::mat4(1);
+        planeta2.vertices = vertexBufferObject;
+        planeta2.uniforms = uniforms;
+        planeta2.currentShader = Shader2;
+        planeta2.uniforms.model = glm::translate(planeta2.uniforms.model, glm::vec3(2.2f, 0.0f, 0.0f))
+                                 * glm::scale(planeta2.uniforms.model, glm::vec3(0.7f, 0.7f, 0.7f));
+
+        models.push_back(planeta2); // Add planeta to models vector
+
+        Model planeta3;
+        planeta3.modelMatrix = glm::mat4(1);
+        planeta3.vertices = vertexBufferObject;
+        planeta3.uniforms = uniforms;
+        planeta3.currentShader = Shader4;
+        planeta3.uniforms.model = glm::translate(planeta3.uniforms.model, glm::vec3(3.3f, 0.0f, 0.0f))
+                                    * glm::scale(planeta3.uniforms.model, glm::vec3(0.4f, 0.4f, 0.4f));
+
+        models.push_back(planeta3); // Add planeta to models vector
+
+        Model planeta4;
+        planeta4.modelMatrix = glm::mat4(1);
+        planeta4.vertices = vertexBufferObject;
+        planeta4.uniforms = uniforms;
+        planeta4.currentShader = Shader5;
+        planeta4.uniforms.model = glm::translate(planeta4.uniforms.model, glm::vec3(4.1f, 0.0f, 0.0f))
+                                    * glm::scale(planeta4.uniforms.model, glm::vec3(0.75f, 0.75f, 0.75f));
+
+        models.push_back(planeta4); // Add planeta to models vector
+
+        //if (planeta.currentShader == ROCOSO) {
+        //    Model luna;
+        //    luna.modelMatrix = glm::mat4(1);
+        //    luna.vertices = vertexBufferObject;
+        //    luna.currentShader = LUNA;
+        //    luna.uniforms = uniforms;
+        //    luna.uniforms.model = glm::translate(luna.uniforms.model, glm::vec3(1.5f, 0.0f, 0.0f))
+        //                          * glm::scale(luna.uniforms.model, glm::vec3(0.2f, 0.2f, 0.2f));
+        //    models.push_back(luna); // Add luna to models vector
+        //}
 
 
         SDL_Event event;
@@ -267,10 +290,6 @@ int SDL_main(int argc, char* argv[]) {
 
             if (event.type == SDL_KEYDOWN) {
                 switch (event.key.keysym.sym) {
-                    case SDLK_SPACE:
-                        currentShader = static_cast<ShaderType>((currentShader + 1) % 7);
-                        std::cout << "Shader: " << currentShader << std::endl;
-                        break;
                     case SDLK_LEFT:
                         camera.cameraPosition.x += -speed;
                         break;

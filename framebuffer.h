@@ -8,8 +8,8 @@
 #include "color.h"  // Include your Color class header
 #include "fragment.h"
 
-constexpr size_t SCREEN_WIDTH = 800;
-constexpr size_t SCREEN_HEIGHT = 600;
+constexpr size_t SCREEN_WIDTH = 1000;
+constexpr size_t SCREEN_HEIGHT = 800;
 
 FragColor blank{
         Color{0, 0, 0},
