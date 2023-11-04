@@ -178,7 +178,7 @@ int SDL_main(int argc, char* argv[]) {
 
     glm::vec3 translationVector(0.0f, 0.0f, 0.0f);
     float a = 45.0f;
-    glm::vec3 rotationAxis(0.0f, 0.0f, 1.0f); // Rotate around the Y-axis
+    glm::vec3 rotationAxis(0.0f, 0.0f, 1.0f); // Rotate around the Z-axis
     glm::vec3 scaleFactor(1.0f, 1.0f, 1.0f);
 
     glm::mat4 translation = glm::translate(glm::mat4(1.0f), translationVector);
@@ -192,10 +192,10 @@ int SDL_main(int argc, char* argv[]) {
     camera.upVector = glm::vec3(0.0f, 1.0f, 0.0f);
 
     // Projection matrix
-    float fovInDegrees = 120.0f;
+    float fovInDegrees = 130.0f;
     float aspectRatio = static_cast<float>(SCREEN_WIDTH) / static_cast<float>(SCREEN_HEIGHT); // Assuming a screen resolution of 800x600
     float nearClip = 0.1f;
-    float farClip = 100.0f;
+    float farClip = 200.0f;
     uniforms.projection = glm::perspective(glm::radians(fovInDegrees), aspectRatio, nearClip, farClip);
 
     // Viewport matrix
@@ -203,6 +203,13 @@ int SDL_main(int argc, char* argv[]) {
     Uint32 frameStart, frameTime;
     std::string title = "FPS: ";
     int speed = 10;
+
+    // Definir velocidades de órbita para cada planeta
+    float orbitSpeed1 = 1.0f;  // Velocidad del planeta más cercano a la estrella
+    float orbitSpeed2 = 0.7f;
+    float orbitSpeed3 = 0.5f;
+    float orbitSpeed4 = 0.3f;
+    float orbitSpeed5 = 0.2f;  // Velocidad del planeta más alejado de la estrella
 
 
     bool running = true;
@@ -245,8 +252,8 @@ int SDL_main(int argc, char* argv[]) {
         planeta2.vertices = vertexBufferObject;
         planeta2.uniforms = uniforms;
         planeta2.currentShader = Shader2;
-        planeta2.uniforms.model = glm::translate(planeta2.uniforms.model, glm::vec3(2.2f, 0.0f, 0.0f))
-                                 * glm::scale(planeta2.uniforms.model, glm::vec3(0.7f, 0.7f, 0.7f));
+        planeta2.uniforms.model = glm::translate(planeta2.uniforms.model, glm::vec3(2.5f, 0.0f, 0.0f))
+                                    * glm::scale(planeta2.uniforms.model, glm::vec3(0.5f, 0.5f, 0.5f));
 
         models.push_back(planeta2); // Add planeta to models vector
 
@@ -269,6 +276,16 @@ int SDL_main(int argc, char* argv[]) {
                                     * glm::scale(planeta4.uniforms.model, glm::vec3(0.75f, 0.75f, 0.75f));
 
         models.push_back(planeta4); // Add planeta to models vector
+
+        Model planeta5;
+        planeta5.modelMatrix = glm::mat4(1);
+        planeta5.vertices = vertexBufferObject;
+        planeta5.uniforms = uniforms;
+        planeta5.currentShader = Shader6;
+        planeta5.uniforms.model = glm::translate(planeta5.uniforms.model, glm::vec3(5.5f, 0.0f, 0.0f))
+                                    * glm::scale(planeta5.uniforms.model, glm::vec3(0.5f, 0.5f, 0.5f));
+
+        models.push_back(planeta5); // Add planeta to models vector
 
         //if (planeta.currentShader == ROCOSO) {
         //    Model luna;
