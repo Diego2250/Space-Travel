@@ -211,6 +211,12 @@ int SDL_main(int argc, char* argv[]) {
     float orbitSpeed4 = 0.3f;
     float orbitSpeed5 = 0.2f;  // Velocidad del planeta más alejado de la estrella
 
+    float orbitAngle1 = 0.0f; // Ángulo inicial de órbita para el planeta 1
+    float orbitAngle2 = 0.0f; // Ángulo inicial de órbita para el planeta 2
+    float orbitAngle3 = 0.0f; // Ángulo inicial de órbita para el planeta 3
+    float orbitAngle4 = 0.0f; // Ángulo inicial de órbita para el planeta 4
+    float orbitAngle5 = 0.0f; // Ángulo inicial de órbita para el planeta 5
+
 
     bool running = true;
     while (running) {
@@ -218,11 +224,27 @@ int SDL_main(int argc, char* argv[]) {
 
         models.clear(); // Clear models vector at the beginning of the loop
 
-        a += 1;
-        glm::mat4 rotation = glm::rotate(glm::mat4(1.0f), glm::radians(a), rotationAxis);
+        //a += 1;
+        //glm::mat4 rotation = glm::rotate(glm::mat4(1.0f), glm::radians(a), rotationAxis);
 
         // Calculate the model matrix
-        uniforms.model = translation * rotation * scale;
+        //uniforms.model = translation * rotation * scale;
+
+        orbitAngle1 += orbitSpeed1;
+        glm::mat4 rotation1 = glm::rotate(glm::mat4(1.0f), glm::radians(orbitAngle1), rotationAxis);
+
+        orbitAngle2 += orbitSpeed2;
+        glm::mat4 rotation2 = glm::rotate(glm::mat4(1.0f), glm::radians(orbitAngle2), rotationAxis);
+
+        orbitAngle3 += orbitSpeed3;
+        glm::mat4 rotation3 = glm::rotate(glm::mat4(1.0f), glm::radians(orbitAngle3), rotationAxis);
+
+        orbitAngle4 += orbitSpeed4;
+        glm::mat4 rotation4 = glm::rotate(glm::mat4(1.0f), glm::radians(orbitAngle4), rotationAxis);
+
+        orbitAngle5 += orbitSpeed5;
+        glm::mat4 rotation5 = glm::rotate(glm::mat4(1.0f), glm::radians(orbitAngle5), rotationAxis);
+
 
         // Create the view matrix using the Camera object
         uniforms.view = glm::lookAt(
@@ -238,54 +260,56 @@ int SDL_main(int argc, char* argv[]) {
         Estrella.currentShader = Shader3;
         models.push_back(Estrella); // Add planeta to models vector
 
+        // Calcular las matrices de modelo para cada planeta
+        uniforms.model = translation * rotation1 * scale;
         Model planeta;
         planeta.modelMatrix = glm::mat4(1);
         planeta.vertices = vertexBufferObject;
         planeta.uniforms = uniforms;
         planeta.currentShader = Shader1;
         planeta.uniforms.model = glm::translate(planeta.uniforms.model, glm::vec3(1.5f, 0.0f, 0.0f))
-                              * glm::scale(planeta.uniforms.model, glm::vec3(0.3f, 0.3f, 0.3f));
-        models.push_back(planeta); // Add planeta to models vector
+                                 * glm::scale(planeta.uniforms.model, glm::vec3(0.3f, 0.3f, 0.3f));
+        models.push_back(planeta);
 
+        uniforms.model = translation * rotation2 * scale;
         Model planeta2;
         planeta2.modelMatrix = glm::mat4(1);
         planeta2.vertices = vertexBufferObject;
         planeta2.uniforms = uniforms;
         planeta2.currentShader = Shader2;
         planeta2.uniforms.model = glm::translate(planeta2.uniforms.model, glm::vec3(2.5f, 0.0f, 0.0f))
-                                    * glm::scale(planeta2.uniforms.model, glm::vec3(0.5f, 0.5f, 0.5f));
+                                  * glm::scale(planeta2.uniforms.model, glm::vec3(0.5f, 0.5f, 0.5f));
+        models.push_back(planeta2);
 
-        models.push_back(planeta2); // Add planeta to models vector
-
+        uniforms.model = translation * rotation3 * scale;
         Model planeta3;
         planeta3.modelMatrix = glm::mat4(1);
         planeta3.vertices = vertexBufferObject;
         planeta3.uniforms = uniforms;
         planeta3.currentShader = Shader4;
         planeta3.uniforms.model = glm::translate(planeta3.uniforms.model, glm::vec3(3.3f, 0.0f, 0.0f))
-                                    * glm::scale(planeta3.uniforms.model, glm::vec3(0.4f, 0.4f, 0.4f));
+                                  * glm::scale(planeta3.uniforms.model, glm::vec3(0.4f, 0.4f, 0.4f));
+        models.push_back(planeta3);
 
-        models.push_back(planeta3); // Add planeta to models vector
-
+        uniforms.model = translation * rotation4 * scale;
         Model planeta4;
         planeta4.modelMatrix = glm::mat4(1);
         planeta4.vertices = vertexBufferObject;
         planeta4.uniforms = uniforms;
         planeta4.currentShader = Shader5;
         planeta4.uniforms.model = glm::translate(planeta4.uniforms.model, glm::vec3(4.1f, 0.0f, 0.0f))
-                                    * glm::scale(planeta4.uniforms.model, glm::vec3(0.75f, 0.75f, 0.75f));
+                                  * glm::scale(planeta4.uniforms.model, glm::vec3(0.75f, 0.75f, 0.75f));
+        models.push_back(planeta4);
 
-        models.push_back(planeta4); // Add planeta to models vector
-
+        uniforms.model = translation * rotation5 * scale;
         Model planeta5;
         planeta5.modelMatrix = glm::mat4(1);
         planeta5.vertices = vertexBufferObject;
         planeta5.uniforms = uniforms;
         planeta5.currentShader = Shader6;
         planeta5.uniforms.model = glm::translate(planeta5.uniforms.model, glm::vec3(5.5f, 0.0f, 0.0f))
-                                    * glm::scale(planeta5.uniforms.model, glm::vec3(0.5f, 0.5f, 0.5f));
-
-        models.push_back(planeta5); // Add planeta to models vector
+                                  * glm::scale(planeta5.uniforms.model, glm::vec3(0.5f, 0.5f, 0.5f));
+        models.push_back(planeta5);
 
         //if (planeta.currentShader == ROCOSO) {
         //    Model luna;
