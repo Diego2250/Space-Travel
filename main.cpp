@@ -22,6 +22,9 @@ Color currentColor;
 
 std::vector<Model> models;
 
+glm::vec3 cameraPosition(0.0f, 0.0f, 3.0f); // Inicializa la posición de la cámara
+float zoom = 1.0f; // Factor de zoom inicial
+
 
 bool init() {
     if (SDL_Init(SDL_INIT_VIDEO) != 0) {
@@ -177,7 +180,6 @@ int SDL_main(int argc, char* argv[]) {
     glm::mat4 projection = glm::mat4(1);
 
     glm::vec3 translationVector(0.0f, 0.0f, 0.0f);
-    float a = 45.0f;
     glm::vec3 rotationAxis(0.0f, 0.0f, 1.0f); // Rotate around the Z-axis
     glm::vec3 scaleFactor(1.0f, 1.0f, 1.0f);
 
@@ -195,14 +197,14 @@ int SDL_main(int argc, char* argv[]) {
     float fovInDegrees = 130.0f;
     float aspectRatio = static_cast<float>(SCREEN_WIDTH) / static_cast<float>(SCREEN_HEIGHT); // Assuming a screen resolution of 800x600
     float nearClip = 0.1f;
-    float farClip = 200.0f;
+    float farClip = 100.0f;
     uniforms.projection = glm::perspective(glm::radians(fovInDegrees), aspectRatio, nearClip, farClip);
 
     // Viewport matrix
     uniforms.viewport = createViewportMatrix(SCREEN_WIDTH, SCREEN_HEIGHT);
     Uint32 frameStart, frameTime;
     std::string title = "FPS: ";
-    int speed = 10;
+    int speed = 1.0f;
 
     // Definir velocidades de órbita para cada planeta
     float orbitSpeed1 = 1.0f;  // Velocidad del planeta más cercano a la estrella
@@ -245,13 +247,6 @@ int SDL_main(int argc, char* argv[]) {
         orbitAngle5 += orbitSpeed5;
         glm::mat4 rotation5 = glm::rotate(glm::mat4(1.0f), glm::radians(orbitAngle5), rotationAxis);
 
-
-        // Create the view matrix using the Camera object
-        uniforms.view = glm::lookAt(
-                camera.cameraPosition, // The position of the camera
-                camera.targetPosition, // The point the camera is looking at
-                camera.upVector        // The up vector defining the camera's orientation
-        );
 
         Model Estrella;
         Estrella.modelMatrix = glm::mat4(1);
@@ -332,20 +327,50 @@ int SDL_main(int argc, char* argv[]) {
             if (event.type == SDL_KEYDOWN) {
                 switch (event.key.keysym.sym) {
                     case SDLK_LEFT:
-                        camera.cameraPosition.x += -speed;
+                        // Mueve la cámara hacia la izquierda
+                        cameraPosition.x -= 1.0f;
+                        camera.targetPosition.x -= 1.0f;
                         break;
                     case SDLK_RIGHT:
-                        camera.cameraPosition.x += speed;
+                        // Mueve la cámara hacia la derecha
+                        cameraPosition.x += 1.0f;
+                        camera.targetPosition.x += 1.0f;
                         break;
                     case SDLK_UP:
-                        camera.cameraPosition.y += -speed;
+                        // Mueve la cámara hacia arriba
+                        cameraPosition.y += 1.0f;
+                        camera.targetPosition.y += 1.0f;
                         break;
                     case SDLK_DOWN:
-                        camera.cameraPosition.y += speed;
+                        // Mueve la cámara hacia abajo
+                        cameraPosition.y -= 1.0f;
+                        camera.targetPosition.y -= 1.0f;
                         break;
                 }
             }
+
+
+            if (event.type == SDL_MOUSEWHEEL) {
+                if (event.wheel.y < 0) {
+                    // Rueda del mouse hacia arriba (zoom in)
+                    zoom *= 1.1f;
+                } else if (event.wheel.y > 0) {
+                    // Rueda del mouse hacia abajo (zoom out)
+                    zoom /= 1.1f;
+                }
+            }
         }
+
+        //cameraPosition.z = 3.0f; // Mantén la posición de la cámara en el plano eclíptico
+
+        uniforms.view = glm::lookAt(
+                cameraPosition,
+                camera.targetPosition,
+                camera.upVector
+        );
+
+        // Ajusta la matriz de proyección para el zoom
+        uniforms.projection = glm::perspective(glm::radians(fovInDegrees * zoom), aspectRatio, nearClip, farClip);
 
         SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
         SDL_RenderClear(renderer);
