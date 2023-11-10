@@ -20,6 +20,9 @@ SDL_Window* window = nullptr;
 SDL_Renderer* renderer = nullptr;
 Color currentColor;
 
+const float MIN_ZOOM = 0.5f;
+const float MAX_ZOOM = 1.0f;
+
 std::vector<Model> models;
 
 glm::vec3 cameraPosition(0.0f, 0.0f, 3.0f); // Inicializa la posición de la cámara
@@ -326,8 +329,42 @@ int SDL_main(int argc, char* argv[]) {
                         // Mueve la cámara hacia abajo
                         camera.cameraPosition.y -= 1.0f;
                         break;
+                    case SDLK_1:
+                    case SDLK_2:
+                    case SDLK_3:
+                    case SDLK_4:
+                    case SDLK_5:
+                    case SDLK_6: {
+                        //hasta que no se presione otra tecla, que haga esto
+
+                        int planetIndex = event.key.keysym.sym - SDLK_1;
+
+                        // Verifica si el índice es válido
+                        if (planetIndex >= 0 && planetIndex < models.size()) {
+
+                            // Cambia el centro de la cámara hacia la posición del planeta seleccionado
+                            camera.targetPosition = models[planetIndex].uniforms.model * glm::vec4(0.0f, 0.0f, 0.0f, 1.0f);
+
+                            // Ajusta el zoom para acercar la cámara al planeta
+
+                            zoom = 0.5f;
+
+
+                        }
+                        break;
+
+                    }
+
                 }
+
+
             }
+
+            if ((event.type == SDL_KEYUP) && (event.key.keysym.sym == SDLK_2 || event.key.keysym.sym == SDLK_3 || event.key.keysym.sym == SDLK_4 || event.key.keysym.sym == SDLK_5 || event.key.keysym.sym == SDLK_6)) {
+                camera.targetPosition = glm::vec3(0.0f, 0.0f, 0.0f);
+                zoom = 1.0f;
+            }
+
 
 
             if (event.type == SDL_MOUSEWHEEL) {
@@ -338,6 +375,7 @@ int SDL_main(int argc, char* argv[]) {
                     // Rueda del mouse hacia abajo (zoom out)
                     zoom /= 1.1f;
                 }
+                zoom = std::max(MIN_ZOOM, std::min(MAX_ZOOM, zoom));
             }
         }
 
