@@ -189,7 +189,7 @@ int SDL_main(int argc, char* argv[]) {
 
     // Initialize a Camera object
     Camera camera;
-    camera.cameraPosition = glm::vec3(0.0f, 0.0f, 3.0f);
+    camera.cameraPosition = glm::vec3(0.0f, 0.0f, 4.0f);
     camera.targetPosition = glm::vec3(0.0f, 0.0f, 0.0f);
     camera.upVector = glm::vec3(0.0f, 1.0f, 0.0f);
 
@@ -226,11 +226,6 @@ int SDL_main(int argc, char* argv[]) {
 
         models.clear(); // Clear models vector at the beginning of the loop
 
-        //a += 1;
-        //glm::mat4 rotation = glm::rotate(glm::mat4(1.0f), glm::radians(a), rotationAxis);
-
-        // Calculate the model matrix
-        //uniforms.model = translation * rotation * scale;
 
         orbitAngle1 += orbitSpeed1;
         glm::mat4 rotation1 = glm::rotate(glm::mat4(1.0f), glm::radians(orbitAngle1), rotationAxis);
@@ -306,17 +301,6 @@ int SDL_main(int argc, char* argv[]) {
                                   * glm::scale(planeta5.uniforms.model, glm::vec3(0.5f, 0.5f, 0.5f));
         models.push_back(planeta5);
 
-        //if (planeta.currentShader == ROCOSO) {
-        //    Model luna;
-        //    luna.modelMatrix = glm::mat4(1);
-        //    luna.vertices = vertexBufferObject;
-        //    luna.currentShader = LUNA;
-        //    luna.uniforms = uniforms;
-        //    luna.uniforms.model = glm::translate(luna.uniforms.model, glm::vec3(1.5f, 0.0f, 0.0f))
-        //                          * glm::scale(luna.uniforms.model, glm::vec3(0.2f, 0.2f, 0.2f));
-        //    models.push_back(luna); // Add luna to models vector
-        //}
-
 
         SDL_Event event;
         while (SDL_PollEvent(&event)) {
@@ -328,23 +312,19 @@ int SDL_main(int argc, char* argv[]) {
                 switch (event.key.keysym.sym) {
                     case SDLK_LEFT:
                         // Mueve la cámara hacia la izquierda
-                        cameraPosition.x -= 1.0f;
-                        camera.targetPosition.x -= 1.0f;
+                        camera.cameraPosition.x -= 1.0f;
                         break;
                     case SDLK_RIGHT:
                         // Mueve la cámara hacia la derecha
-                        cameraPosition.x += 1.0f;
-                        camera.targetPosition.x += 1.0f;
+                        camera.cameraPosition.x += 1.0f;
                         break;
                     case SDLK_UP:
                         // Mueve la cámara hacia arriba
-                        cameraPosition.y += 1.0f;
-                        camera.targetPosition.y += 1.0f;
+                        camera.cameraPosition.y += 1.0f;
                         break;
                     case SDLK_DOWN:
                         // Mueve la cámara hacia abajo
-                        cameraPosition.y -= 1.0f;
-                        camera.targetPosition.y -= 1.0f;
+                        camera.cameraPosition.y -= 1.0f;
                         break;
                 }
             }
@@ -361,10 +341,8 @@ int SDL_main(int argc, char* argv[]) {
             }
         }
 
-        //cameraPosition.z = 3.0f; // Mantén la posición de la cámara en el plano eclíptico
-
         uniforms.view = glm::lookAt(
-                cameraPosition,
+                camera.cameraPosition,
                 camera.targetPosition,
                 camera.upVector
         );

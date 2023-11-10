@@ -66,19 +66,19 @@ std::vector<Fragment> triangle(const Vertex& a, const Vertex& b, const Vertex& c
 
             glm::vec3 worldPos = a.worldPos * w + b.worldPos * v + c.worldPos * u;
             glm::vec3 originalPos = a.originalPos * w + b.originalPos * v + c.originalPos * u;
-
-            fragments.push_back(
-                    Fragment{
-                            static_cast<uint16_t>(P.x),
-                            static_cast<uint16_t>(P.y),
-                            z,
-                            color,
-                            intensity,
-                            worldPos,
-                            originalPos,
-                            normal
-                    }
-            );
+            if (P.x >= 0 && P.y >= 0 && P.x < SCREEN_WIDTH && P.y < SCREEN_HEIGHT)
+                fragments.push_back(
+                        Fragment{
+                                static_cast<uint16_t>(P.x),
+                                static_cast<uint16_t>(P.y),
+                                z,
+                                color,
+                                intensity,
+                                worldPos,
+                                originalPos,
+                                normal
+                        }
+                );
         }
     }
     return fragments;
