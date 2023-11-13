@@ -19,4 +19,8 @@ Este proyecto es un renderizador de cuerpos celestiales desarrollado en C++ util
 3. Manten presionadas las teclas numéricas (1-6) para centrar la cámara en diferentes planetas.
 4. Rueda del mouse para realizar zoom in/out.
 
+## 🎥 Video de funcionamiento 
+https://github.com/Diego2250/Space-Travel/assets/77738746/ec367253-12c7-4494-ac49-515163b04862
+
+
 
