@@ -20,7 +20,8 @@ Este proyecto es un renderizador de cuerpos celestiales desarrollado en C++ util
 4. Rueda del mouse para realizar zoom in/out.
 
 ## 🎥 Video de funcionamiento 
-https://github.com/Diego2250/Space-Travel/assets/77738746/65fedec3-7c61-4af3-96cd-04d7b118f269
+
+https://github.com/Diego2250/Space-Travel/assets/77738746/384d3cf4-322f-41e5-a010-09b476faa284
 
 ## 💯 Rúbrica
 - [x][Criterio Subjetivo] 30 Puntos por la estética de su sistema completo
